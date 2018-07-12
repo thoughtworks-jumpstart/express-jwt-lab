@@ -1,23 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
 const { setTokenInRequest } = require("./middlewares/auth");
-const isProduction = process.env.NODE_ENV === "production";
-
-// mongoose.connection.dropCollection("users");
-
-if (isProduction) {
-  mongoose.connect(
-    process.env.MONGODB_URI,
-    { useNewUrlParser: true }
-  );
-} else {
-  mongoose.connect(
-    "mongodb://localhost:27017/express-jwt-lab",
-    { useNewUrlParser: true }
-  );
-  mongoose.set("debug", true);
-}
 
 const app = express();
 app.use(express.json());
