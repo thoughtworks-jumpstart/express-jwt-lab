@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const { verifyToken } = require("./middlewares/auth");
+const { setTokenInRequest } = require("./middlewares/auth");
 const isProduction = process.env.NODE_ENV === "production";
 
 // mongoose.connection.dropCollection("users");
@@ -26,7 +26,7 @@ app.get("/", (req, res, next) => {
   res.json({ message: "hello authentication!" });
 });
 
-app.get("/secret", verifyToken, (req, res, next) => {
+app.get("/secret", setTokenInRequest, (req, res, next) => {
   jwt.verify(req.token, "some_secret", (err, data) => {
     if (err) {
       next(err);
