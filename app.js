@@ -10,13 +10,21 @@ app.get("/", (req, res, next) => {
 });
 
 app.get("/secret", setTokenInRequest, (req, res, next) => {
-  jwt.verify(req.token, "some_secret", (err, data) => {
-    if (err) {
-      next(err);
-    } else {
-      res.json({ message: "here's your super secret message", data });
-    }
-  });
+  try {
+    const data = jwt.verify(req.token, "some_secret"); // if you want to access the signed payload (i.e. user object)
+    res.json({ message: "here's your super secret message", data });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get("/secretBooks", setTokenInRequest, (req, res, next) => {
+  try {
+    jwt.verify(req.token, "some_secret"); // if you don't need to access the signed payload  (i.e. user object)
+    res.json({ message: "here are your secret books" });
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.post("/signin", (req, res, next) => {
@@ -26,9 +34,9 @@ app.post("/signin", (req, res, next) => {
     email: "tom@email.com"
   };
 
-  jwt.sign({ user }, "some_secret", (err, token) => {
-    res.json({ token });
-  });
+  const token = jwt.sign({ user }, "some_secret");
+
+  res.json({ token });
 });
 
 module.exports = app;
