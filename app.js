@@ -11,17 +11,8 @@ app.get("/", (req, res, next) => {
 
 app.get("/secret", setTokenInRequest, (req, res, next) => {
   try {
-    const data = jwt.verify(req.token, "some_secret"); // if you want to access the signed payload (i.e. user object)
-    res.json({ message: "here's your super secret message", data });
-  } catch (err) {
-    next(err);
-  }
-});
-
-app.get("/secretBooks", setTokenInRequest, (req, res, next) => {
-  try {
-    jwt.verify(req.token, "some_secret"); // if you don't need to access the signed payload  (i.e. user object)
-    res.json({ message: "here are your secret books" });
+    jwt.verify(req.token, "some_secret");
+    res.json({ message: "here's your super secret message" });
   } catch (err) {
     next(err);
   }
